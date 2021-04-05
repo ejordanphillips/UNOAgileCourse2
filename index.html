@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+        rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+        crossorigin="anonymous">
+        <title>Jordan's Task List</title>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-light bg-light">
+          <div class="container">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="#todo-items">My Todo List</a>
+            </div>
+          </div>
+        </nav>
+        <br>
+
+        <div class="container" id="todo-items">
+            <h3>Todo Items</h3>
+            <table class="table">
+                <thead>
+                    <th scope="col">id</th>
+                    <th scope="col">label</th>
+                    <th scope="col">name</th>
+                    <th scope="col">description</th>
+                    <th scope="col">date</th>
+                    <th scope="col">importance</th>
+                </thead>
+                <tbody>
+                        <tr>
+                            <th scope="row">{{ item }}</th>
+                            <td>{{ data[item]["label"] }}</td>
+                            <td>{{ data[item]["name"] }}</td>
+                            <td>{{ data[item]["description"] }}</td>
+                            <td>{{ data[item]["date"] }}</td>
+                            <td>{{ data[item]["importance"] }}</td>
+                        </tr>
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <br>
+
+            <!--Add-->
+            <div class="row" id="add">
+                <form action="/v1/add" method="POST">
+                    <textarea class="form-control" name="label" placeholder="Enter Label"></textarea>
+                    <textarea class="form-control" name="name" placeholder="Enter Name"></textarea>
+                    <textarea class="form-control" name="description" placeholder="Enter Description"></textarea>
+                    <textarea class="form-control" name="date" placeholder="Enter Date"></textarea>
+                    <textarea class="form-control" name="importance" placeholder="Enter Importance"></textarea>
+                    <input type="submit" class="btn btn-success" value="Create New Todo">
+                </form>
+            </div>
+
+            <!--Update-->
+            <br>
+            <br>
+            <br>
+            <div class="row" id="update">
+                <form action="/v1/update" method="POST">
+                    <textarea class="form-control" name="id" placeholder="Enter ID of item to update"></textarea>
+                    <textarea class="form-control" name="label" placeholder="Enter Label"></textarea>
+                    <textarea class="form-control" name="name" placeholder="Enter Name"></textarea>
+                    <textarea class="form-control" name="description" placeholder="Enter Description"></textarea>
+                    <textarea class="form-control" name="date" placeholder="Enter Date"></textarea>
+                    <textarea class="form-control" name="importance" placeholder="Enter Importance"></textarea>
+                    <input type="submit" class="btn btn-success" value="Update Item">
+                </form>
+            </div>
+
+            <!--Delete-->
+            <br>
+            <br>
+            <br>
+            <div class="row" id="delete">
+                <form action="/v1/update" method="POST">
+                    <textarea class="form-control" name="id" placeholder="Enter ID of item to delete"></textarea>
+                    <input type="submit" class="btn btn-success" value="Delete Item">
+                </form>
+            </div>
+
+
+        </div>
+
+    </body>
+</html>
