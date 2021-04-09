@@ -30,6 +30,7 @@ app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
 
 mysql = MySQL(app)
 
+
 @app.route('/v1/all', methods=['GET', 'POST'])
 def all():
     '''
@@ -65,13 +66,13 @@ def all():
         app.logger.error(err)
         abort(404)
 
+
 @app.route('/v1/add', methods=['GET', 'POST'])
 def add():
     '''
     Title: add
     Arguments:
         request - <str>
-            .label -required
             .name - required
             .description - required
             .date - required
@@ -82,21 +83,21 @@ def add():
     if request.method == 'POST':
         try:
             data = request.form
-            args = ['label', 'name', 'description', 'date', 'importance']
+            args = ['name', 'description', 'date', 'importance']
             for arg in args:
                 if not data[arg]:
                     return f'{arg} is a required argument'
-            label = data['label']
             name = data['name']
             description = data['description']
             date = data['date']
             importance = data['importance']
-            cursor = mysql.connection.cursor
+            cursor = mysql.connection.cursor()
             query = '''
-                    INSERT INTO todo (label, name, description, date, importance)
-                    VALUES (%s, %s, %s, %s, %s);
+                    INSERT INTO todo
+                    (name, description, date, importance)
+                    VALUES (%s, %s, %s, %s);
                     '''
-            params = [label, name, description, date, importance]
+            params = [name, description, date, importance]
             cursor.execute(query, params)
             status = cursor.fetchall()
             mysql.connection.commit()
@@ -107,23 +108,23 @@ def add():
             abort(404)
     else:
         try:
-            args = ['label', 'name', 'description', 'date', 'importance']
+            args = ['name', 'description', 'date', 'importance']
             for arg in args:
                 if not request.args.get(arg):
                     return f'{arg} is a required argument'
 
             app.logger.debug('ARGS are %s', request.args)
-            label = request.args.get('label')
             name = request.args.get('name')
             description = request.args.get('description')
             date = request.args.get('date')
             importance = request.args.get('importance')
             cursor = mysql.connection.cursor()
             query = '''
-                    INSERT INTO todo (label, name, description, date, importance)
-                    VALUES (%s, %s, %s, %s, %s);
+                    INSERT INTO todo
+                    (name, description, date, importance)
+                    VALUES (%s, %s, %s, %s);
                     '''
-            params = [label, name, description, date, importance]
+            params = [name, description, date, importance]
             cursor.execute(query, params)
             status = cursor.fetchall()
             mysql.connection.commit()
@@ -132,6 +133,7 @@ def add():
         except Exception as err:
             app.logger.error(err)
             abort(404)
+
 
 @app.route('/v1/update', methods=['GET', 'POST'])
 def update():
@@ -140,7 +142,6 @@ def update():
     Description: updates an existing entry
     Arguments:
             .id - required
-            .label - required
             .name - required
             .description - required
             .date - required
@@ -149,23 +150,24 @@ def update():
     if request.method == 'POST':
         try:
             data = request.form
-            args = ['id', 'label', 'name', 'description', 'date', 'importance']
+            args = ['id', 'name', 'description', 'date', 'importance']
             for arg in args:
                 if not data[arg]:
                     return f'{arg} is a required argument'
             id = data['id']
-            label = data['label']
             name = data['name']
             description = data['description']
             date = data['date']
             importance = data['importance']
-            cursor = mysql.connection.cursor
+            cursor = mysql.connection.cursor()
             query = '''
-                    UPDATE todo SET label = %s, name = %s, description = %s, date = %s, importance = %s
+                    UPDATE todo SET
+                    name = %s, description = %s,
+                    date = %s, importance = %s
                     WHERE id = %s;
                     '''
             app.logger.debug(f'QUERY IS :: {query}')
-            params = [label, name, description, date, importance, id]
+            params = [name, description, date, importance, id]
             cursor.execute(query, params)
             status = cursor.fetchall()
             mysql.connection.commit()
@@ -176,23 +178,23 @@ def update():
             abort(404)
     else:
         try:
-            args = ['id', 'label', 'name', 'description', 'date', 'importance']
+            args = ['id', 'name', 'description', 'date', 'importance']
             for arg in args:
                 if not request.args.get(arg):
                     return f'{arg} is a required argument'
             id = request.args.get('id')
-            label = request.args.get('label')
             name = request.args.get('name')
             description = request.args.get('description')
             date = request.args.get('date')
             importance = request.args.get('importance')
             cursor = mysql.connection.cursor()
             query = '''
-                    UPDATE todo SET label = %s, name = %s, description = %s, date = %s, importance = %s
+                    UPDATE todo SET name = %s, description = %s,
+                    date = %s, importance = %s
                     WHERE id = %s;
                     '''
             app.logger.debug(f'QUERY IS :: {query}')
-            params = [label, name, description, date, importance, id]
+            params = [id, name, description, date, importance]
             cursor.execute(query, params)
             status = cursor.fetchall()
             mysql.connection.commit()
@@ -201,6 +203,7 @@ def update():
         except Exception as err:
             app.logger.error(err)
             abort(404)
+
 
 @app.route('/v1/delete', methods=['GET', 'POST'])
 def delete():
@@ -217,13 +220,14 @@ def delete():
             for arg in args:
                 if not data[arg]:
                     return f'{arg} is a required argument'
-            item_id = data['id']
-            cursor = mysql.connection.cursor
+            id = data['id']
+            app.logger.error(id)
+            cursor = mysql.connection.cursor()
             query = '''
                     DELETE FROM todo
                     WHERE id = %s;
                     '''
-            params = [item_id]
+            params = [id]
             cursor.execute(query, params)
             status = cursor.fetchall()
             mysql.connection.commit()
@@ -239,13 +243,13 @@ def delete():
             for arg in args:
                 if not request.args.get(arg):
                     return f'{arg} is a required argument'
-            item_id = request.args.get('id')
+            id = request.args.get('id')
             cursor = mysql.connection.cursor()
             query = '''
                     DELETE FROM todo
                     WHERE id = %s;
                     '''
-            params = [item_id]
+            params = [id]
             cursor.execute(query, params)
             status = cursor.fetchall()
             mysql.connection.commit()
@@ -254,6 +258,7 @@ def delete():
         except Exception as err:
             app.logger.error(err)
             abort(404)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -264,7 +269,8 @@ def home():
     Returns: home template with data
     '''
     data = all()
-    return render_template("index.html", data = data)
+    return render_template("index.html", data=data)
+
 
 if __name__ == '__main__':
     app.run()
