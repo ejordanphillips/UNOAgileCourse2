@@ -25,21 +25,21 @@
             <table class="table">
                 <thead>
                     <th scope="col">id</th>
-                    <th scope="col">label</th>
                     <th scope="col">name</th>
                     <th scope="col">description</th>
                     <th scope="col">date</th>
                     <th scope="col">importance</th>
                 </thead>
                 <tbody>
+                    {% for item in data %}
                         <tr>
                             <th scope="row">{{ item }}</th>
-                            <td>{{ data[item]["label"] }}</td>
                             <td>{{ data[item]["name"] }}</td>
                             <td>{{ data[item]["description"] }}</td>
                             <td>{{ data[item]["date"] }}</td>
                             <td>{{ data[item]["importance"] }}</td>
                         </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             <br>
@@ -48,8 +48,7 @@
 
             <!--Add-->
             <div class="row" id="add">
-                <form action="/v1/add" method="POST">
-                    <textarea class="form-control" name="label" placeholder="Enter Label"></textarea>
+                <form action='/v1/add' method="POST">
                     <textarea class="form-control" name="name" placeholder="Enter Name"></textarea>
                     <textarea class="form-control" name="description" placeholder="Enter Description"></textarea>
                     <textarea class="form-control" name="date" placeholder="Enter Date"></textarea>
@@ -63,9 +62,8 @@
             <br>
             <br>
             <div class="row" id="update">
-                <form action="/v1/update" method="POST">
+                <form action='/v1/update' method="POST">
                     <textarea class="form-control" name="id" placeholder="Enter ID of item to update"></textarea>
-                    <textarea class="form-control" name="label" placeholder="Enter Label"></textarea>
                     <textarea class="form-control" name="name" placeholder="Enter Name"></textarea>
                     <textarea class="form-control" name="description" placeholder="Enter Description"></textarea>
                     <textarea class="form-control" name="date" placeholder="Enter Date"></textarea>
@@ -79,7 +77,7 @@
             <br>
             <br>
             <div class="row" id="delete">
-                <form action="/v1/update" method="POST">
+                <form action='/v1/delete' method="POST">
                     <textarea class="form-control" name="id" placeholder="Enter ID of item to delete"></textarea>
                     <input type="submit" class="btn btn-success" value="Delete Item">
                 </form>
